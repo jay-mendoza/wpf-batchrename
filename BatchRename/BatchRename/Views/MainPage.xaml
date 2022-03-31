@@ -1,0 +1,337 @@
+﻿<!-- ······································································
+// <copyright file="MainPage.xaml" company="Jay Bautista Mendoza">       //
+//     Copyright (c) Jay Bautista Mendoza. All rights reserved.          //
+//     THIS IS PART OF MY PERSONAL OPEN SOURCE WPF WINDOW TEMPLATE.      //
+//     THIS IS NOT PRIVATE PROPERTY. FEEL FREE TO MODIFY OR USE IT.      //
+// </copyright>                                                          //
+······································································· -->
+
+<Page x:Class="SqlToXml.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="300" d:DesignWidth="300"
+	Title="MainPage">
+
+    <Page.Resources>
+        <ResourceDictionary Source=".\Styles\MainPage.xaml"/>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Margin="10 20 10 20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBox
+                x:Name="PathTextBox"
+                Grid.Column="0"
+                Grid.Row="0"
+                Style="{StaticResource ResourceKey=PathTextBoxStyle}"
+                TextChanged="PathTextBox_TextChanged"
+                />
+            <TextBlock
+                Grid.Column="0"
+                Grid.Row="1"
+                Style="{StaticResource ResourceKey=PathTextBlockStyle}"
+                Text="TARGET DIRECTORY"
+                />
+            <Button
+                x:Name="BrowsePathButton"
+                Click="BrowsePathButton_Click"
+                Content="browse"
+                Grid.Column="1"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Margin="2 0 0 0"
+                Style="{StaticResource ResourceKey=PathBrowseButtonStyle}"
+                Tag="0"
+                />
+            <Label
+                x:Name="DropPathLabel"
+                AllowDrop="True"
+                Content="get"
+                Drop="DropPathLabel_Drop"
+                Grid.Column="2"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Margin="2 0 0 0"
+                Tag="⟱"
+                Style="{StaticResource ResourceKey=PathDropLabelStyle}"
+                ToolTip="Drag &amp; drop a file/folder here to get the path."
+                ToolTipService.InitialShowDelay="0"
+                />
+            
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="5 0 5 0" x:Name="ModeGrid">
+            <TabControl x:Name="ModeTabControl" Style="{StaticResource ResourceKey=TabControlStyle}" SelectionChanged="ModeTabControl_SelectionChanged">
+                <TabControl.Resources>
+                    <Style TargetType="TabPanel">
+                        <Setter Property="HorizontalAlignment" Value="Center" />
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </TabControl.Resources>
+                <TabItem Style="{StaticResource ResourceKey=TabItemStyle}" ToolTip="Find→Replace">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="Find: "
+                            />
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="Replace: "
+                            />
+                        <TextBox
+                            x:Name="FindTextBox"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            TextChanged="FindTextBox_TextChanged"
+                            />
+                        <TextBox
+                            x:Name="ReplaceTextBox"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            TextChanged="ReplaceTextBox_TextChanged"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            />
+                    </Grid>
+
+                </TabItem>
+                <TabItem Style="{StaticResource ResourceKey=TabItemStyle}" ToolTip="Insert↓Index">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="Insert Text: "
+                            />
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="Insert Index: "
+                            />
+                        <TextBox
+                            x:Name="InsertTextBox"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="0"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            TextChanged="InsertTextBox_TextChanged"
+                            />
+                        <TextBox
+                            x:Name="InsertIndexTextBox"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            PreviewTextInput="InsertIndexTextBox_PreviewTextInput"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            ToolTip="Zero (or blank) to insert from the start."
+                            TextChanged="InsertIndexTextBox_TextChanged"
+                            />
+                        <CheckBox
+                            x:Name="FromEndCheckBox"
+                            Content="Count from end"
+                            Grid.Column="2"
+                            Grid.Row="1"
+                            Margin="10 0 0 0"
+                            Style="{StaticResource ResourceKey=CheckBoxStyle}"
+                            ToolTip="Index count from the end of the text."
+                            />
+
+                    </Grid>
+                </TabItem>
+                <TabItem Style="{StaticResource ResourceKey=TabItemStyle}" ToolTip="Change↑Order">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="New Pattern: "
+                            />
+                        <TextBox
+                            x:Name="NewPatternTextBox"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            PreviewTextInput="NewPatternTextBox_PreviewTextInput"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            TextChanged="NewPatternTextBox_TextChanged"
+                            />
+
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Margin="0 0 0 5"
+                            Style="{StaticResource ResourceKey=LabelStyle}"
+                            Text="Separator: "
+                            />
+                        <TextBox
+                            x:Name="SeparatorTextBox"
+                            Grid.Column="1"
+                            Grid.Row="1"
+                            PreviewTextInput="SeparatorTextBox_PreviewTextInput"
+                            Style="{StaticResource ResourceKey=TextBoxStyle}"
+                            TextChanged="SeparatorTextBox_TextChanged"
+                            />
+                        
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="10 5 5 5" x:Name="OptionsGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Column="0" Margin="20 0 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <RadioButton
+                    x:Name="FilesRadioButton"
+                    Checked="FilesRadioButton_Checked"
+                    Content="Files"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    GroupName="FilesOrFolders"
+                    Style="{StaticResource ResourceKey=RadioButtonStyle}"
+                    Unchecked="FilesRadioButton_Unchecked"
+                    />
+                
+                <RadioButton
+                    x:Name="FoldersRadioButton"
+                    Checked="FoldersRadioButton_Checked"
+                    Content="Folders"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    GroupName="FilesOrFolders"
+                    Style="{StaticResource ResourceKey=RadioButtonStyle}"
+                    Unchecked="FoldersRadioButton_Unchecked"
+                    />
+
+                <Grid x:Name="FoldersOptionsGrid" Grid.Column="1" Grid.RowSpan="2" Margin="20 0 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <CheckBox
+                        x:Name="RecursiveFoldersCheckBox"
+                        Content="Include folders in subfolders"
+                        Grid.Row="0"
+                        Style="{StaticResource ResourceKey=CheckBoxStyle}"
+                        ToolTip="Recursive folders rename."
+                        />
+
+                </Grid>
+
+                <Grid x:Name="FilesOptionsGrid" Grid.Column="1" Grid.RowSpan="2" Margin="20 0 0 0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <CheckBox
+                        x:Name="RecursiveFilesCheckBox"
+                        Content="Include files in subfolders"
+                        Grid.Row="0"
+                        Style="{StaticResource ResourceKey=CheckBoxStyle}"
+                        ToolTip="Recursive files rename."
+                        />
+                    
+                    <CheckBox
+                        x:Name="IncludeExtensionsCheckBox"
+                        Content="Include filename extensions"
+                        Grid.Row="1"
+                        Style="{StaticResource ResourceKey=CheckBoxStyle}"
+                        />
+                    
+                </Grid>
+            </Grid>
+            
+            <Button
+                x:Name="RenameAllButton"
+                Click="RenameAllButton_Click"
+                Content=" Rename All "
+                Grid.Column="2"
+                Margin="20 5 5 5"
+                Style="{StaticResource ResourceKey=ButtonStyle}"
+                />
+            
+        </Grid>
+
+        <Grid Grid.Row="3" Margin="5 5 5 5">
+            <TextBox
+                x:Name="StatusTextBox"
+                AllowDrop="False"
+                Style="{StaticResource ResourceKey=ReadOnlyTextBoxStyle}"
+                />
+        </Grid>
+
+    </Grid>
+</Page>
